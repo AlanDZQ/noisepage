@@ -69,7 +69,8 @@ class TestCaseOLTPBench(TestCase):
             STARTTIME=time.strftime("%Y%m%d-%H%M%S"))
 
         # base directory for the result files, default is in the 'oltp_result' folder under the current directory
-        self.test_result_base_dir = self.args.get("test_result_dir")
+        # self.test_result_base_dir = self.args.get("test_result_dir")
+        self.test_result_base_dir = 'results'
         if not self.test_result_base_dir:
             self.test_result_base_dir = os.path.join(
                 os.getcwd(), "oltp_result")
@@ -99,10 +100,11 @@ class TestCaseOLTPBench(TestCase):
             BUCKETS=self.buckets)
 
         # oltpbench test command
-        self.test_command = "{BIN} -b {BENCHMARK} -c {XML} -d {RESULTS} {FLAGS} -json-histograms {HISTOGRAMS}".format(
-            BIN=constants.OLTPBENCH_DEFAULT_BIN,
+        # java -jar oltpbench2.jar -b tpcc -c config/cockroachdb/sample_tpcc_config.xml --create=true --load=true --execute=true -s 5
+        self.test_command = "{BIN} -b {BENCHMARK} -c {XML} {FLAGS} -json-histograms {HISTOGRAMS}".format(
+            # BIN=constants.OLTPBENCH_DEFAULT_BIN,
+            BIN='java -jar oltpbench2.jar',
             BENCHMARK=self.benchmark,
-            RESULTS=self.test_result_dir,
             XML=self.xml_config,
             FLAGS=self.oltp_flag,
             HISTOGRAMS=self.test_histogram_path)
@@ -143,12 +145,13 @@ class TestCaseOLTPBench(TestCase):
     def config_xml_file(self):
         xml = ElementTree.parse(self.xml_template)
         root = xml.getroot()
-        root.find("dbtype").text = constants.OLTPBENCH_DEFAULT_DBTYPE
+        root.find("type").text = constants.OLTPBENCH_DEFAULT_DBTYPE
         root.find("driver").text = constants.OLTPBENCH_DEFAULT_DRIVER
-        root.find("DBUrl").text = self.get_db_url()
+        root.find("url").text = self.get_db_url()
         root.find("username").text = constants.OLTPBENCH_DEFAULT_USERNAME
         root.find("password").text = constants.OLTPBENCH_DEFAULT_PASSWORD
         root.find("isolation").text = str(self.transaction_isolation)
+        root.find("batchsize").text = 128
         root.find("scalefactor").text = str(self.scalefactor)
         root.find("terminals").text = str(self.terminals)
         for work in root.find("works").findall("work"):

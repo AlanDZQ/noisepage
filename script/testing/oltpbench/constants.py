@@ -32,6 +32,9 @@ OLTPBENCH_DEFAULT_REPORT_SERVER = None
 OLTPBENCH_DEFAULT_WAL_ENABLE = True
 OLTPBENCH_DEFAULT_CONTINUE_ON_ERROR = False
 
+
+OLTPBENCH_II_VERSION = '20.1.3'
+
 OLTPBENCH_DIR_CONFIG = os.path.join(OLTPBENCH_GIT_LOCAL_PATH, "config")
 OLTPBENCH_DIR_TEST_RESULT = os.path.join(OLTPBENCH_GIT_LOCAL_PATH, "results")
 OLTPBENCH_TEST_ERROR_MSG = "Error: failed to complete oltpbench test"
@@ -47,6 +50,14 @@ OLTPBENCH_ANT_COMMANDS = [
     OLTPBENCH_ANT_COMMAND_BOOTSTRAP, OLTPBENCH_ANT_COMMAND_RESOLVE,
     OLTPBENCH_ANT_COMMAND_BUILD
 ]
+
+# MVN commands for OLTP-II
+
+OLTPBENCH_MVN_BUILD = "./mvnw clean package"
+OLTPBENCH_MVN_CD_TARGET = "cd target"
+OLTPBENCH_MVN_UNZIP = "unzip oltpbench2-" + OLTPBENCH_II_VERSION + "-SNAPSHOT.zip"
+OLTPBENCH_MVN_CD_OLTP = "cd oltpbench2-" + OLTPBENCH_II_VERSION + "-SNAPSHOT"
+OLTPBENCH_MVN_COMMANDS = [OLTPBENCH_MVN_BUILD, OLTPBENCH_MVN_CD_TARGET, OLTPBENCH_MVN_UNZIP, OLTPBENCH_MVN_CD_OLTP]
 
 # API endpoints for Performance Storage Service
 # Each pair represents different environment. One could choose where the benchmark testing result will be uploaded to
